@@ -26,6 +26,8 @@ mod instance;
 mod linker;
 mod memory;
 mod module;
+#[cfg(feature = "pooling-allocator")]
+mod poolingallocator_config;
 #[cfg(feature = "profiling")]
 mod profiling;
 mod r#ref;
@@ -46,6 +48,8 @@ pub use crate::instance::*;
 pub use crate::linker::*;
 pub use crate::memory::*;
 pub use crate::module::*;
+#[cfg(feature = "pooling-allocator")]
+pub use crate::poolingallocator_config::*;
 pub use crate::r#extern::*;
 pub use crate::r#ref::*;
 pub use crate::store::*;
