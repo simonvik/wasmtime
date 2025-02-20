@@ -542,6 +542,15 @@ wasmtime_config_host_memory_creator_set(wasm_config_t *,
  */
 WASMTIME_CONFIG_PROP(void, memory_init_cow, bool)
 
+#ifdef WASMTIME_FEATURE_POOLING_ALLOCATOR
+
+/**
+ * \brief Configures whether the pooling allocator should be used
+ *
+ * https://docs.wasmtime.dev/api/wasmtime/struct.PoolingAllocationConfig.html */
+WASMTIME_CONFIG_PROP(void, allocation_strategy, wasm_poolingallocator_config_t *)
+#endif
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

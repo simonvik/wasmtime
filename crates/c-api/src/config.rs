@@ -2,12 +2,12 @@
 // them with the default set of features enabled.
 #![cfg_attr(not(feature = "cache"), allow(unused_imports))]
 
-use crate::{handle_result, wasm_memorytype_t, wasmtime_error_t};
+use crate::{handle_result, wasm_memorytype_t, wasm_poolingallocator_config_t, wasmtime_error_t};
 use std::os::raw::c_char;
 use std::ptr;
 use std::{ffi::CStr, sync::Arc};
 use wasmtime::{
-    Config, LinearMemory, MemoryCreator, OptLevel, ProfilingStrategy, Result, Strategy,
+    Config, LinearMemory, MemoryCreator, OptLevel, ProfilingStrategy, Result, Strategy, InstanceAllocationStrategy
 };
 
 #[repr(C)]
@@ -444,3 +444,10 @@ pub extern "C" fn wasmtime_config_memory_init_cow_set(c: &mut wasm_config_t, ena
 pub extern "C" fn wasmtime_config_wasm_wide_arithmetic_set(c: &mut wasm_config_t, enable: bool) {
     c.config.wasm_wide_arithmetic(enable);
 }
+
+
+#[unsafe(no_mangle)]
+pub extern "C" fn wasmtime_config_allocation_strategy_set(c: &mut wasm_config_t, cfg: Box<wasm_poolingallocator_config_t>) {
+    c.config.allocation_strategy(InstanceAllocationStrategy::Pooling(cfg.config));
+}
+

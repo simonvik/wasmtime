@@ -39,10 +39,14 @@ default = [
   'cranelift',
   'winch',
   'debug-builtins',
+  'memory-protection-keys',
+  'pooling-allocator',
   # ... if you add a line above this be sure to change the other locations
   # marked WASMTIME_FEATURE_LIST
 ]
 async = ['wasmtime-c-api/async']
+pooling-allocator = ['wasmtime-c-api/pooling-allocator']
+memory-protection-keys = ['wasmtime-c-api/memory-protection-keys']
 profiling = ["wasmtime-c-api/profiling"]
 cache = ["wasmtime-c-api/cache"]
 parallel-compilation = ['wasmtime-c-api/parallel-compilation']

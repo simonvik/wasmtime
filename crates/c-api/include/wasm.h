@@ -149,6 +149,9 @@ WASM_DECLARE_OWN(store)
 
 WASM_API_EXTERN own wasm_store_t* wasm_store_new(wasm_engine_t*);
 
+// PoolingAllocator Config
+WASM_DECLARE_OWN(poolingallocator_config)
+WASM_API_EXTERN own wasm_poolingallocator_config_t* wasm_poolingallocator_config_new();
 
 ///////////////////////////////////////////////////////////////////////////////
 // Type Representations
