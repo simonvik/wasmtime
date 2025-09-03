@@ -46,6 +46,14 @@ pub enum wasmtime_profiling_strategy_t {
     WASMTIME_PROFILING_STRATEGY_PERFMAP,
 }
 
+#[repr(u8)]
+#[derive(Clone)]
+pub enum wasmtime_opt_mpk_enable_t {
+    WASMTIME_OPT_MPK_ENABLE,
+    WASMTIME_OPT_MPK_DISABLE,
+    WASMTIME_OPT_MPK_AUTO,
+}
+
 #[unsafe(no_mangle)]
 pub extern "C" fn wasm_config_new() -> Box<wasm_config_t> {
     Box::new(wasm_config_t {
@@ -671,4 +679,19 @@ pub extern "C" fn wasmtime_pooling_allocation_strategy_set(
 ) {
     c.config
         .allocation_strategy(InstanceAllocationStrategy::Pooling(pc.config.clone()));
+}
+
+
+#[unsafe(no_mangle)]
+pub extern "C" fn wasmtime_pooling_allocation_config_memory_protection_keys_set(
+    c: &mut wasmtime_pooling_allocation_config_t,
+    enabled: wasmtime_opt_mpk_enable_t
+) {
+    use wasmtime_opt_mpk_enable_t::*;
+    use wasmtime::Enabled;
+    c.config.memory_protection_keys(match enabled {
+        WASMTIME_OPT_MPK_ENABLE => Enabled::Yes,
+        WASMTIME_OPT_MPK_DISABLE => Enabled::No,
+        WASMTIME_OPT_MPK_AUTO => Enabled::Auto,
+    });
 }

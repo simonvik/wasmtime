@@ -58,6 +58,7 @@ enum wasmtime_opt_level_enum { // OptLevel
   WASMTIME_OPT_LEVEL_SPEED_AND_SIZE,
 };
 
+
 /**
  * \brief Different ways wasmtime can enable profiling JIT code.
  *
@@ -85,6 +86,17 @@ enum wasmtime_profiling_strategy_enum { // ProfilingStrategy
   /// run under `perf` necessary calls will be made to profile generated JIT
   /// code.
   WASMTIME_PROFILING_STRATEGY_PERFMAP,
+};
+
+typedef uint8_t wasmtime_opt_mpk_enable_t;
+
+enum wasmtime_opt_mpk_enable_enum { // Memory protection keys
+  /// Use MPK or fail if not supported.
+  WASMTIME_OPT_MPK_ENABLE,
+  /// Do not use MPK.
+  WASMTIME_OPT_MPK_DISABLE,
+  /// Use MPK if supported by the current system; fall back to guard regions otherwise.
+  WASMTIME_OPT_MPK_AUTO,
 };
 
 #define WASMTIME_CONFIG_PROP(ret, name, ty)                                    \
@@ -759,6 +771,18 @@ WASMTIME_POOLING_ALLOCATION_CONFIG_PROP(max_memory_size, size_t)
  */
 WASMTIME_POOLING_ALLOCATION_CONFIG_PROP(total_gc_heaps, uint32_t)
 
+#ifdef WASMTIME_FEATURE_MEMORY_PROTECTION_KEYS
+/**
+ * \brief Configures whether memory protection keys (MPK) should be used for more
+ * efficient layout of pool-allocated memories.
+ *
+ * For more information see the Rust documentation at
+ https://docs.wasmtime.dev/api/wasmtime/struct.PoolingAllocationConfig.html#method.memory_protection_keys
+*/
+WASMTIME_POOLING_ALLOCATION_CONFIG_PROP(memory_protection_keys, wasmtime_opt_mpk_enable_t);
+#endif
+
+
 /**
  * \brief Sets the Wasmtime allocation strategy to use the pooling allocator. It
  * does not take ownership of the pooling allocation configuration object, which
@@ -784,6 +808,16 @@ WASM_API_EXTERN void wasmtime_pooling_allocation_strategy_set(
 WASMTIME_CONFIG_PROP(void, wasm_component_model, bool)
 
 #endif // WASMTIME_FEATURE_COMPONENT_MODEL
+
+#ifdef WASMTIME_FEATURE_POOLING_ALLOCATOR
+/**
+ * \brief Configures whether the pooling allocator should be used
+ *
+ * https://docs.wasmtime.dev/api/wasmtime/struct.PoolingAllocationConfig.html */
+WASMTIME_CONFIG_PROP(void, allocation_strategy, wasmtime_pooling_allocation_config_t *)
+#endif
+
+
 
 #ifdef __cplusplus
 } // extern "C"
